@@ -9,26 +9,53 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class BSTIterator {
+private:
+    stack<TreeNode*>mystack ; 
+    bool reverse = true ;
 public:
 
-    void inorder(TreeNode* root , map<int,int>& mpp){
-        if(root == NULL)return ;
-
-        inorder(root->left,mpp);
-        mpp[root->val]++;
-        inorder(root->right,mpp);
+    void store(TreeNode* node){
+        while(node != NULL){
+            mystack.push(node);
+            if(reverse)node = node->right;
+            else node = node->left;
+        }
     }
 
+    BSTIterator(TreeNode* root , bool isreverse){
+        reverse = isreverse ;
+        store(root);
+    }
+    
+    int next() {
+        TreeNode* temp = mystack.top();
+        mystack.pop();
+        if(!reverse)store(temp->right);
+        else store(temp->left);
+        return temp->val;
+    }
+    
+    bool hasNext() {
+        return !mystack.empty();
+    }
+};
+
+class Solution {
+public:
     bool findTarget(TreeNode* root, int k) {
-        map<int,int>mpp;
+        if( !root )return false;
 
-        inorder(root,mpp);
+        BSTIterator l (root , false);
+        BSTIterator r(root, true);
 
-        for(auto [first,second] : mpp){
-            mpp[first]--;
-            if(mpp[first] == 0)mpp.erase(first);
-            if(mpp.find(k-first) != mpp.end()) return true;
+        int i = l.next();
+        int j = r.next();
+
+        while(i<j){
+        if(i+j == k)return true;
+        if(i+j<k) i = l.next();
+        else j = r.next();
         }
         return false;
     }
