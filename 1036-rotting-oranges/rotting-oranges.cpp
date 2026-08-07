@@ -6,6 +6,8 @@ public:
         int visit[n][m];
         queue<pair<pair<int,int>,int>>q ;
 
+        int freshoranges = 0;
+
         for(int i = 0;i<n;i++){
             for(int j = 0;j<m;j++){
                 if(grid[i][j] == 2){
@@ -13,12 +15,14 @@ public:
                     visit[i][j] = 2;
                 }
                 else visit[i][j] = 0;
+                if(grid[i][j] == 1)freshoranges++;
             }
         }
 
         int time  = 0;
         int drow[] = {1,0,-1,0};
         int dcol[] = {0,1,0,-1};
+        int oranges = 0;
 
         while(!q.empty()){
             int r = q.front().first.first;
@@ -35,14 +39,11 @@ public:
                 grid[dr][dc] == 1 && !visit[dr][dc]){
                     q.push({{dr,dc},t+1});
                     visit[dr][dc] = 1;
+                    oranges++;
                 }
             }
         }
-        for(int i = 0;i<n;i++){
-            for(int j = 0;j<m;j++){
-                if(grid[i][j] == 1 && visit[i][j] == 0)return -1;
-            }
-        }
+       if(freshoranges != oranges)return -1;
 
         return time;
     }
