@@ -1,7 +1,7 @@
 class Solution {
 public:
 
-    bool dfs( vector<vector<int>> adj,vector<int>& visit,int node , vector<int>& path){
+    bool dfs( vector<vector<int>>& adj,vector<int>& visit,int node , vector<int>& path){
         visit[node] = 1;
 
         for(auto it : adj[node]){
