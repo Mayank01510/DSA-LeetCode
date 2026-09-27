@@ -18,6 +18,8 @@ public:
             int col = pq.top().second.second;
             pq.pop();
 
+            if(t > dis[row][col])continue;
+
             if(row == n-1 && col == n-1)return t;
 
             for(int i = 0;i<4;i++){
