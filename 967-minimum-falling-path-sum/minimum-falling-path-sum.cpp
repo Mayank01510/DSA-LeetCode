@@ -21,26 +21,28 @@ public:
         int n = matrix.size();
         int m = matrix[0].size();
 
-        vector<vector<int>>dp(n,vector<int>(m,0));
+        vector<int>dp(m,0);
 
-        for(int i = 0;i<m;i++)dp[0][i] = matrix[0][i];
+        for(int i = 0;i<m;i++)dp[i] = matrix[0][i];
 
         for(int i = 1;i<n;i++){
+            vector<int>temp(m,0);
             for(int j = 0;j<m;j++){
                 int x = INT_MAX;
                 int y = INT_MAX;
                 int z = INT_MAX;
 
-                if(j-1 >= 0) x = dp[i-1][j-1] + matrix[i][j];
-                y = dp[i-1][j] + matrix[i][j];
-                if(j+1 < m) z = dp[i-1][j+1] + matrix[i][j];
+                if(j-1 >= 0) x = dp[j-1] + matrix[i][j];
+                y = dp[j] + matrix[i][j];
+                if(j+1 < m) z = dp[j+1] + matrix[i][j];
 
-                dp[i][j] =  min(x , min(y , z));
+                temp[j] =  min(x , min(y , z));
             }
+            dp = temp;
         }
-        int minsum =    dp[n-1][0];
+        int minsum = dp[0];
         for(int i = 0;i<m;i++){
-            minsum = min(minsum,dp[n-1][i]);
+            minsum = min(minsum,dp[i]);
         }
         return minsum;
     }
